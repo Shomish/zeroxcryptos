@@ -1,0 +1,28 @@
+import { useState, useEffect } from 'react'
+
+const useCryptos = () => {
+  const [cryptos, setCryptos] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCryptos = async () => {
+      try {
+        const res = await fetch(
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1'
+        )
+        const data = await res.json()
+        setCryptos(data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCryptos()
+  }, [])
+
+  return { cryptos, loading }
+}
+
+export default useCryptos  // ← export default
